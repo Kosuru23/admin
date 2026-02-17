@@ -24,7 +24,7 @@ export default function DashboardScreen() {
   return (
     <div className="min-h-screen bg-gray-50 no-scrollbar">
       <Header />
-      <div className="p-6 mt-4"> {/* Pulled up slightly to overlap header if desired */}
+      <div className="p-6 mt-4"> 
         
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">

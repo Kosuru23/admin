@@ -7,7 +7,7 @@ import LoginScreen from "./screens/LoginScreen";
 import DashboardScreen from "./screens/DashboardScreen";
 import AnalyticsScreen from "./screens/AnalyticsScreen";
 // import AnalyticsScreen from "./screens/AnalyticsScreen";
-// import UsersScreen from "./screens/UsersScreen";
+import UsersScreen from "./screens/UsersScreen";
 import CalendarScreen from "./screens/CalendarScreen";
 // import SettingsScreen from "./screens/SettingsScreen";
 
@@ -17,7 +17,6 @@ function App() {
   return (
     <Router>
       {isAuthenticated ? (
-        // 🔒 AUTHENTICATED LAYOUT
         <div className="flex h-screen">
           <Sidebar onLogout={() => setIsAuthenticated(false)} />
 
@@ -25,6 +24,7 @@ function App() {
             <Routes>
               <Route path="/dashboard" element={<DashboardScreen />} />
               <Route path="/analytics" element={<AnalyticsScreen />} />
+              <Route path="/users" element={<UsersScreen />} />
               <Route path="/calendar" element={<CalendarScreen />} />
               <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>
