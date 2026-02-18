@@ -29,10 +29,9 @@ export default function AnalyticsScreen() {
           <p className="px-4 py-2 text-sm font-bold bg-slate-900 text-white rounded-lg">Last 7 Days</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <StatCard title="Total Revenue" value="₱128,430" />
           <StatCard title="Total Downloads" value="14,201" />
-          <StatCard title="# of Scans" value="3,421" />
           <StatCard title="# of Premium" value="892" />
         </div>
 
