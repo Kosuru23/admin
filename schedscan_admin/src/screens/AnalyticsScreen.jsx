@@ -1,43 +1,57 @@
+import React from 'react';
+import UserCompositionChart from '../components/graphs/AnalyticsPie';
+import ScanActivityChart from '../components/graphs/AnalyticsGraph';
+import StatCard from '../components/graphs/StatCard';
+
+// Data remains consistent with your previous dashboard style (example )
+const scanActivityData = [
+  { name: 'Mon', Scans: 45, Success: 42 },
+  { name: 'Tue', Scans: 52, Success: 48 },
+  { name: 'Wed', Scans: 38, Success: 35 },
+  { name: 'Thu', Scans: 65, Success: 61 },
+  { name: 'Fri', Scans: 48, Success: 44 },
+  { name: 'Sat', Scans: 25, Success: 22 },
+  { name: 'Sun', Scans: 15, Success: 14 },
+];
+
+const userTypeData = [
+  { name: 'Students', value: 840, color: '#6366f1' },
+  { name: 'Faculty', value: 405, color: '#fbbf24' },
+];
+
 export default function AnalyticsScreen() {
-  // Dummy data for demonstration
-  const stats = [
-    { title: "Total Users", value: 1245 },
-    { title: "Active Users", value: 842 },
-    { title: "New Signups", value: 56 },
-    { title: "Revenue", value: "$12,340" },
-  ];
-
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Analytics</h1>
-
-      {/* Stats cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat, idx) => (
-          <div
-            key={idx}
-            className="bg-white shadow-md rounded-lg p-4 flex flex-col justify-between"
-          >
-            <p className="text-gray-500">{stat.title}</p>
-            <p className="text-xl font-bold mt-2">{stat.value}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Dummy chart */}
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <p className="text-gray-500 mb-4">User Growth (Last 7 Days)</p>
-        <div className="h-64 flex items-end gap-2">
-          {/* Simple bar chart */}
-          {[20, 35, 25, 50, 40, 30, 45].map((val, i) => (
-            <div
-              key={i}
-              className="bg-slate-600 rounded w-6"
-              style={{ height: `${val * 2}px` }}
-              title={`${val} users`}
-            ></div>
-          ))}
+    <div className="min-h-screen bg-gray-50 no-scrollbar pb-10">
+      <Header />
+      
+      <div className="p-6 mt-2">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+          <p className="px-4 py-2 text-sm font-bold bg-slate-900 text-white rounded-lg">Last 7 Days</p>
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatCard title="Total Revenue" value="₱128,430" />
+          <StatCard title="Total Downloads" value="14,201" />
+          <StatCard title="# of Scans" value="3,421" />
+          <StatCard title="# of Premium" value="892" />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <ScanActivityChart data={scanActivityData} />
+          </div>
+          <UserCompositionChart data={userTypeData} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <div className="bg-linear-to-r from-indigo-100 via-blue-50 to-amber-50 p-8 h-48 flex items-end">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-3xl font-bold text-slate-800">System Analytics</h1>
       </div>
     </div>
   );
