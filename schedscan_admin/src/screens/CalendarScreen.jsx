@@ -254,9 +254,6 @@ function Header({ title }) {
   return (
     <div className="bg-linear-to-r from-indigo-100 via-blue-50 to-amber-50 p-8 h-48 flex items-end">
       <div className="flex items-center gap-4">
-        <div className="p-3 bg-white/60 backdrop-blur-md rounded-xl shadow-sm border border-white">
-          <CalendarIcon className="text-indigo-600" size={24} />
-        </div>
         <h1 className="text-3xl font-bold text-slate-800 tracking-tight">{title}</h1>
       </div>
     </div>

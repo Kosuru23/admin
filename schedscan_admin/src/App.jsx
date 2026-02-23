@@ -6,7 +6,6 @@ import LoginScreen from "./screens/LoginScreen";
 
 import DashboardScreen from "./screens/DashboardScreen";
 import AnalyticsScreen from "./screens/AnalyticsScreen";
-// import AnalyticsScreen from "./screens/AnalyticsScreen";
 import UsersScreen from "./screens/UsersScreen";
 import CalendarScreen from "./screens/CalendarScreen";
 // import SettingsScreen from "./screens/SettingsScreen";

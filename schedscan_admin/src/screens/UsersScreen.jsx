@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
-import { Search, Mail, Shield, Trash2, ChevronLeft, ChevronRight, UserMinus, Power } from 'lucide-react';
+import { useState } from 'react';
+import { Search, Shield, ChevronLeft, ChevronRight, UserMinus, Power } from 'lucide-react';
 import DeactivateUserModal from '../components/modal/DeactivateUserModal';
-import ComposeMailModal from '../components/modal/ComposeMailModal';
+import UserDetailsModal from '../components/modal/user_details';
 
 const usersData = [
-  { id: 1, name: "John Doe", phone_number: "123-456-7890", email: "john@example.com", role: "Student", status: "Active", joinDate: "Jan 12, 2026", premium_status: "Active" },
-  { id: 2, name: "Sarah Smith", phone_number: "987-654-3210", email: "sarah.s@example.com", role: "Faculty", status: "Active", joinDate: "Feb 05, 2026", premium_status: "Inactive" },
+  { id: 1, name: "John Doe", phone_number: "123-456-7890", email: "john@example.com", role: "Student", status: "Active", joinDate: "Jan 12, 2026", premium_status: "Active", 
+    schedule: [
+      { subject_code: "CS101", location: "LR2", start_time: "07:30 AM", end_time: "09:00 AM" },
+      { subject_code: "MATH21", location: "LR1", start_time: "10:30 AM", end_time: "12:00 PM" }
+    ]},
+  { id: 2, name: "Sarah Smith", phone_number: "987-654-3210", email: "sarah.s@example.com", role: "Faculty", status: "Active", joinDate: "Feb 05, 2026", premium_status: "Inactive", 
+    schedule: [
+      { subject_code: "CS101", location: "LR3", start_time: "07:30 AM", end_time: "09:00 AM" },
+      { subject_code: "MATH21", location: "LR4", start_time: "10:30 AM", end_time: "12:00 PM" }
+    ] },
   { id: 3, name: "Mike Johnson", phone_number: "555-123-4567", email: "mike.j@example.com", role: "Student", status: "Inactive", joinDate: "Jan 28, 2026", premium_status: "Inactive" },
   { id: 4, name: "Elena Rodriguez", phone_number: "444-987-6543", email: "elena.r@example.com", role: "Faculty", status: "Active", joinDate: "Feb 10, 2026", premium_status: "Active" },
   { id: 5, name: "John Doe", phone_number: "123-456-7890", email: "john@example.com", role: "Student", status: "Active", joinDate: "Jan 12, 2026", premium_status: "Active" },
@@ -29,35 +37,60 @@ const usersData = [
 ];
 
 export default function UsersScreen() {
+  const [users, setUsers] = useState(usersData);
   const [searchTerm, setSearchTerm] = useState("");
+  const [rolefilter, setRoleFilter] = useState("");
   
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; 
 
-  const filteredUsers = usersData.filter(user => 
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = users.filter(user => {
+      const matchesSearch = 
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesRole = rolefilter === "" || 
+        user.role.toLowerCase().includes(rolefilter.toLowerCase());
+
+      return matchesSearch && matchesRole;
+  });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [targetUser, setTargetUser] = useState(null);
 
-  const [isMailOpen, setIsMailOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
 
-  const openMailModal = (user) => {
-    setSelectedUser(user);
-    setIsMailOpen(true);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [detailsUser, setDetailsUser] = useState(null);
+
+  const openDetailsModal = (user) => {
+    setDetailsUser(user);
+    setIsDetailsOpen(true);
   };
 
   const openDeactivateModal = (user) => {
     setTargetUser(user);
     setIsModalOpen(true);
   };
+  
 
   const handleStatusToggle = () => {
-    console.log(`Toggling status for: ${targetUser.name}`);
-    setIsModalOpen(false);
+    if (!targetUser) return;
+
+    // Update the users state
+    setUsers(prevUsers => 
+      prevUsers.map(user => {
+        if (user.id === targetUser.id) {
+          return { 
+            ...user, 
+            status: user.status === 'Active' ? 'Inactive' : 'Active' 
+          };
+        }
+        return user;
+      })
+    );
+
+    setIsModalOpen(false); // Close the modal
+    setTargetUser(null);   // Clear target
   };
 
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
@@ -75,12 +108,12 @@ export default function UsersScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 no-scrollbar">
+    <div className="min-h-screen bg-gray-50 no-scrollbar pb-20">
       <Header />
       
       <div className="p-6 mt-4"> 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-          <div className="relative w-full md:w-96">
+          <div className="relative w-full md:w-96 gap-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             <input 
               type="text"
@@ -93,6 +126,17 @@ export default function UsersScreen() {
               }}
             />
           </div>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
+              <button className="px-2 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors" onClick={(e) => {setRoleFilter(''); setCurrentPage(1);}}>
+                Track All
+              </button>
+              <button className="px-2 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors" onClick={(e) => {setRoleFilter('Faculty'); setCurrentPage(1);}}>
+                Track Faculty
+              </button>
+              <button className="px-2 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors" onClick={(e) => {setRoleFilter('Student'); setCurrentPage(1);}}>
+                Track Students
+              </button>
+            </div>
         </div>
 
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -109,9 +153,14 @@ export default function UsersScreen() {
                   <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
+              {/* To show the modal just press on the user row, and to show the deactivate/reactivate button just press on the button at the right side of the user row. */}
               <tbody className="divide-y divide-gray-100">
                 {currentItems.map((user, index) => (
-                  <tr key={`${user.id}-${index}`} className="hover:bg-gray-50/50 transition-colors">
+                  <tr 
+                    key={`${user.id}-${index}`}  
+                    onClick={() => openDetailsModal(user)} 
+                    className="hover:bg-gray-50 transition-colors cursor-pointer group"
+                  >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold">
@@ -148,36 +197,19 @@ export default function UsersScreen() {
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
                         <button 
-                            onClick={() => openMailModal(user)}
-                            className="p-2 text-gray-400 hover:text-slate-600 hover:bg-gray-100 rounded-lg transition-colors"
-                            >
-                            <Mail size={18} />
-                        </button>
-
-                        <ComposeMailModal 
-                        isOpen={isMailOpen}
-                        onClose={() => setIsMailOpen(false)}
-                        user={selectedUser}
-                        />
-                        <button 
-                            onClick={() => openDeactivateModal(user)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                openDeactivateModal(user);
+                            }}
                             className={`p-2 rounded-lg transition-colors ${
                                 user.status === 'Active' 
                                 ? 'text-gray-400 hover:text-amber-500 hover:bg-amber-50' 
                                 : 'text-emerald-500 hover:bg-emerald-50'
                             }`}
                             title={user.status === 'Active' ? 'Deactivate' : 'Reactivate'}
-                            >
+                        >
                             {user.status === 'Active' ? <UserMinus size={18} /> : <Power size={18} />}
                         </button>
-                        
-                        <DeactivateUserModal 
-                        isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
-                        onConfirm={handleStatusToggle}
-                        userName={targetUser?.name}
-                        currentStatus={targetUser?.status}
-                        />
                       </div>
                     </td>
                   </tr>
@@ -185,8 +217,8 @@ export default function UsersScreen() {
               </tbody>
             </table>
           </div>
-
-
+            
+          
           <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex justify-between items-center">
             <p className="text-sm text-gray-500 font-medium">
               Showing <span className="text-slate-900">{indexOfFirstItem + 1}</span> to <span className="text-slate-900">{Math.min(indexOfLastItem, filteredUsers.length)}</span> of <span className="text-slate-900">{filteredUsers.length}</span> users
@@ -226,6 +258,20 @@ export default function UsersScreen() {
           </div>
         </div>
       </div>
+
+      <DeactivateUserModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleStatusToggle}
+        userName={targetUser?.name}
+        currentStatus={targetUser?.status}
+      />
+
+      <UserDetailsModal 
+        isOpen={isDetailsOpen}
+        onClose={() => setIsDetailsOpen(false)}
+        user={detailsUser}
+      />
     </div>
   );
 }

@@ -17,6 +17,7 @@ const scanActivityData = [
 const userTypeData = [
   { name: 'Students', value: 840, color: '#6366f1' },
   { name: 'Faculty', value: 405, color: '#fbbf24' },
+  { name: 'Parent', value: 120, color: '#10b981' },
 ];
 
 export default function AnalyticsScreen() {
@@ -29,10 +30,11 @@ export default function AnalyticsScreen() {
           <p className="px-4 py-2 text-sm font-bold bg-slate-900 text-white rounded-lg">Last 7 Days</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard title="Total Revenue" value="₱128,430" />
           <StatCard title="Total Downloads" value="14,201" />
           <StatCard title="# of Premium" value="892" />
+          <StatCard title="# of Parents Linked" value="90" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

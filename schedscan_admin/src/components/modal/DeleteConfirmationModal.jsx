@@ -1,4 +1,3 @@
-import React from 'react';
 import { AlertTriangle, X } from 'lucide-react';
 
 export default function DeleteConfirmationModal({ isOpen, onClose, onConfirm, itemName }) {
