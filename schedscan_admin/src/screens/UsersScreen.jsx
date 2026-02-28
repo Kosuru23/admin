@@ -6,14 +6,14 @@ import UserDetailsModal from '../components/modal/user_details';
 const usersData = [
   { id: 1, name: "John Doe", phone_number: "123-456-7890", email: "john@example.com", role: "Student", status: "Active", joinDate: "Jan 12, 2026", premium_status: "Active", 
     schedule: [
-      { subject_code: "CS101", location: "LR2", start_time: "07:30 AM", end_time: "09:00 AM" },
-      { subject_code: "MATH21", location: "LR1", start_time: "10:30 AM", end_time: "12:00 PM" }
+      { subject_code: "CS101", location: "LR2", start_time: "7:00 AM", end_time: "10:00 AM", day: "MWS" },
+      { subject_code: "MATH21", location: "LR1", start_time: "10:30 AM", end_time: "12:00 PM", day: "WS" }
     ]},
   { id: 2, name: "Sarah Smith", phone_number: "987-654-3210", email: "sarah.s@example.com", role: "Faculty", status: "Active", joinDate: "Feb 05, 2026", premium_status: "Inactive", 
     schedule: [
-      { subject_code: "CS101", location: "LR3", start_time: "07:30 AM", end_time: "09:00 AM" },
-      { subject_code: "MATH21", location: "LR4", start_time: "10:30 AM", end_time: "12:00 PM" }
-    ] },
+      { subject_code: "CS101", location: "LR2", start_time: "7:00 AM", end_time: "10:00 AM", day: "MWS" },
+      { subject_code: "MATH21", location: "LR1", start_time: "10:30 AM", end_time: "12:00 PM", day: "WS" }
+    ]},
   { id: 3, name: "Mike Johnson", phone_number: "555-123-4567", email: "mike.j@example.com", role: "Student", status: "Inactive", joinDate: "Jan 28, 2026", premium_status: "Inactive" },
   { id: 4, name: "Elena Rodriguez", phone_number: "444-987-6543", email: "elena.r@example.com", role: "Faculty", status: "Active", joinDate: "Feb 10, 2026", premium_status: "Active" },
   { id: 5, name: "John Doe", phone_number: "123-456-7890", email: "john@example.com", role: "Student", status: "Active", joinDate: "Jan 12, 2026", premium_status: "Active" },
@@ -271,6 +271,7 @@ export default function UsersScreen() {
         isOpen={isDetailsOpen}
         onClose={() => setIsDetailsOpen(false)}
         user={detailsUser}
+        allUsers={usersData}
       />
     </div>
   );
